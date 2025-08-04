@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PMS – Gestão de Quartos</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- ===== Navbar ===== -->
+  <header class="navbar">
+    <button id="toggle-sidebar" class="burger">&#9776;</button>
+    <h1 class="logo">Pousada PMS</h1>
+  </header>
+
+  <!-- ===== Sidebar ===== -->
+  <aside id="sidebar">
+    <nav>
+      <a href="index.html"        data-roles="admin,reception">Quartos</a>
+      <a href="reservations.html" data-roles="admin,reception">Reservas</a>
+      <a href="customers.html"    data-roles="admin,reception">Clientes</a>
+      <a href="payments.html"     data-roles="admin,reception">Pagamentos</a>
+      <a href="reports.html"      data-roles="admin,reception">Relatórios</a>
+      <a href="housekeeping.html" data-roles="admin,housekeeping">Limpeza</a>
+    </nav>
+  </aside>
+
+  <!-- ===== Conteúdo principal ===== -->
+  <main id="content">
+    <div class="content-header">
+      <h2>Quartos</h2>
+      <button id="btn-add" class="primary">Novo Quarto</button>
+    </div>
+
+    <table id="rooms-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <!-- ===== Modal (Cadastro/Edição) ===== -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-content">
+      <span id="close-modal" class="close">&times;</span>
+      <h3 id="modal-title">Novo Quarto</h3>
+
+      <form id="room-form">
+        <input type="hidden" name="id" />
+
+        <label>Nome
+          <input type="text" name="name" required />
+        </label>
+
+        <label>Tipo
+          <input type="text" name="type" required />
+        </label>
+
+        <label>Capacidade
+          <input type="number" name="capacity" min="1" required />
+        </label>
+
+        <label>Preço por diária (R$)
+          <input type="number" name="basePrice" step="0.01" required />
+        </label>
+
+        <label>Status
+          <select name="status">
+            <option value="available">Disponível</option>
+            <option value="reserved">Reservado</option>
+            <option value="maintenance">Manutenção</option>
+          </select>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="primary">Salvar</button>
+          <button type="button" id="cancel" class="secondary">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="app-core.js"></script>
+  <script src="rooms.js"></script>
+</body>
+</html>

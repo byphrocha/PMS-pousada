@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagamentos – PMS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <button id="toggle-sidebar" class="burger">&#9776;</button>
+    <a href="/" class="logo" style="text-decoration:none;color:inherit;">Pousada PMS</a>
+    <button onclick="history.back()" class="burger">&#8592;</button>
+    <h1 class="logo">Pagamentos</h1>
+  </header>
+
+  <main id="content" style="margin-left:0">
+    <div class="content-header">
+      <h2>Pagamentos</h2>
+      <button id="btn-add-pay" class="primary">Novo Pagamento</button>
+    </div>
+
+    <table id="payments-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Reserva</th>
+          <th>Hóspede</th>
+          <th>Quarto</th>
+          <th>Valor (R$)</th>
+          <th>Método</th>
+          <th>Data</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <!-- Modal -->
+  <div id="modal-pay" class="modal hidden">
+    <div class="modal-content">
+      <span id="close-pay" class="close">&times;</span>
+      <h3 id="modal-pay-title">Novo Pagamento</h3>
+
+      <form id="pay-form">
+        <label>Reserva
+          <select name="ReservationId" id="res-select" required></select>
+        </label>
+
+        <label>Valor (R$)
+          <input type="number" name="amount" step="0.01" required>
+        </label>
+
+        <label>Método
+          <select name="method" required>
+            <option value="credit">Cartão de Crédito</option>
+            <option value="debit">Cartão de Débito</option>
+            <option value="cash">Dinheiro</option>
+            <option value="pix">PIX</option>
+          </select>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="primary">Salvar</button>
+          <button type="button" id="cancel-pay" class="secondary">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app-core.js"></script>
+  <script src="payments.js"></script>
+</body>
+</html>

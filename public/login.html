@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Login – PMS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body style="display:flex;justify-content:center;align-items:center;height:100vh;">
+  <form id="login-form" style="width:300px;">
+    <h2>Login</h2>
+    <input type="email" name="email" placeholder="E‑mail" required><br>
+    <input type="password" name="password" placeholder="Senha" required><br>
+    <button type="submit" class="primary">Entrar</button>
+  </form>
+
+  <script>
+  console.log('SCRIPT DE LOGIN CARREGADO');
+  const BASE = window.location.origin;
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target));
+    console.log('SUBMIT acionado', data);
+
+    try {
+      const res = await fetch(`${BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      console.log('Resposta fetch', res.status);
+
+      if (!res.ok) {
+        alert('Credenciais inválidas');
+        return;
+      }
+
+      const json = await res.json();
+      console.log('JSON recebido:', json);
+      const { token, user } = json;
+      console.log('TOKEN recebido:', token);
+
+      console.log('Salvando token no localStorage...');
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+      console.log('Token salvo? ', localStorage.getItem('token'));
+
+      // Redireciona após 200 ms
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 200);
+
+    } catch (err) {
+      console.error('Erro no fetch:', err);
+      alert('Falha de rede ou CORS');
+    }
+  });
+</script>
+</body>
+</html>

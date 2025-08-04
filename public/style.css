@@ -1,0 +1,119 @@
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+}
+/* ===== Variáveis ===== */
+:root {
+  --primary:   #2c3e50;
+  --accent:    #e67e22;
+  --bg:        #f7f9fc;
+  --white:     #ffffff;
+  --gray:      #e0e6ed;
+  --shadow:    0 4px 10px rgba(0,0,0,0.06);
+  --radius:    8px;
+  --font:      'Poppins', sans-serif;
+}
+
+/* ===== Reset ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font); background: var(--bg); color: #333; }
+
+/* ===== Navbar ===== */
+.navbar {
+  position: fixed; top: 0; left: 0; right: 0;
+  height: 56px; background: var(--primary); color: var(--white);
+  display: flex; align-items: center; padding: 0 1rem; z-index: 1000;
+}
+.navbar .logo { margin-left: .5rem; font-size: 1.2rem; font-weight: 600; }
+.burger {
+  background: none; border: none; color: var(--white);
+  font-size: 1.5rem; cursor: pointer; display: none;
+}
+
+/* ===== Sidebar ===== */
+#sidebar {
+  position: fixed; top: 56px; bottom: 0; left: 0;
+  width: 200px; background: var(--white); box-shadow: var(--shadow);
+  transition: transform .3s ease;
+}
+#sidebar nav { display: flex; flex-direction: column; padding: 1rem 0; }
+#sidebar a {
+  padding: .75rem 1.5rem; color: var(--primary); text-decoration: none;
+  transition: background .2s;
+}
+#sidebar a:hover, #sidebar a.active { background: var(--gray); }
+
+/* ===== Conteúdo principal ===== */
+#content {
+  margin-top: 56px;
+  margin-left: 200px;
+  padding: 2rem;
+  transition: margin-left .3s ease;
+}
+
+.content-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1rem;
+}
+
+.primary   { background: var(--accent); color: var(--white); border: none; padding: .5rem 1rem; border-radius: var(--radius); cursor: pointer; }
+.secondary { background: var(--gray);   border: none; padding: .5rem 1rem; border-radius: var(--radius); cursor: pointer; }
+.primary:hover   { opacity: .9; }
+.secondary:hover { opacity: .9; }
+
+/* ===== Tabela ===== */
+table { width: 100%; border-collapse: collapse; background: var(--white); box-shadow: var(--shadow); border-radius: var(--radius); overflow: hidden; }
+thead { background: var(--primary); color: var(--white); }
+th, td { padding: .75rem 1rem; text-align: left; }
+tbody tr:nth-child(even) { background: var(--bg); }
+td:last-child { white-space: nowrap; }
+.action-btn { background: none; border: none; cursor: pointer; margin-right: .5rem; font-size: 1rem; }
+
+/* ===== Modal ===== */
+.modal {
+  position: fixed; inset: 0; background: rgba(0,0,0,.4);
+  display: flex; align-items: center; justify-content: center;
+}
+.modal.hidden { display: none; }
+.modal-content {
+  background: var(--white); padding: 2rem; border-radius: var(--radius); width: 100%; max-width: 400px; box-shadow: var(--shadow);
+}
+.close { float: right; font-size: 1.5rem; cursor: pointer; }
+form { display: flex; flex-direction: column; gap: .75rem; margin-top: 1rem; }
+label { display: flex; flex-direction: column; font-size: .9rem; }
+input, select { padding: .5rem; border: 1px solid var(--gray); border-radius: var(--radius); }
+.form-actions { display: flex; justify-content: flex-end; gap: .5rem; }
+
+/* ===== Responsivo ===== */
+@media (max-width: 768px) {
+  .burger { display: block; }
+  #sidebar { transform: translateX(-100%); }
+  #sidebar.open { transform: translateX(0); }
+  #content { margin-left: 0; }
+}
+
+td:nth-child(3)[data-status="dirty"]       { color: #e74c3c; font-weight: 600; }
+td:nth-child(3)[data-status="maintenance"] { color: #f39c12; font-weight: 600; }
+
+/* ---------- Toast (feedback visual) ---------- */
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#2e7d32;           /* verde sucesso */
+  color:#fff;
+  padding:.8rem 1.2rem;
+  border-radius:6px;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .4s;
+  z-index:9999;
+}
+.toast.error{ background:#c62828; }  /* vermelho erro */
+.toast.show{ opacity:1; }
+
+/* ---------- Tabelas responsivas ---------- */
+.table-wrapper{ overflow-x:auto; }
+table{ min-width:600px; }  /* evita quebrar colunas em telas <360 px */
