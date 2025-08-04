@@ -1,0 +1,41 @@
+<% /* views/reservations.ejs */ %>
+
+<h1 class="h3 mb-3">Reservas</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Quarto</th>
+      <th>Cliente</th>
+      <th>Check‑in</th>
+      <th>Check‑out</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% reservations.forEach(res => { %>
+      <tr>
+        <!-- ID -->
+        <td><%= res.id %></td>
+
+        <!-- Quarto (verifica associação) -->
+        <td><%= res.Room ? res.Room.name : '-' %></td>
+
+        <!-- Cliente / hóspede -->
+        <td><%= res.guestName || res.customerName || '-' %></td>
+
+        <!-- Datas (corrigidas para fuso) -->
+        <td>
+          <%= res.checkIn
+                ? new Date(res.checkIn + 'T00:00:00').toLocaleDateString()
+                : '-' %>
+        </td>
+        <td>
+          <%= res.checkOut
+                ? new Date(res.checkOut + 'T00:00:00').toLocaleDateString()
+                : '-' %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>

@@ -1,49 +1,74 @@
+/* ===== DEPENDÊNCIAS ===== */
 const express = require('express');
-const body    = require('body-parser');
-const cors    = require('cors');
-const { sequelize } = require('./models');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const expressLayouts = require('express-ejs-layouts');
+const { Op } = require('sequelize');
 
-// Inicialização
+/* ===== MODELOS ===== */
+const { Room, Reservation, Customer, Payment } = require('./models');
+
+/* ===== APP ===== */
 const app = express();
+
+/* --- Configurações de view --- */
+app.set('view engine', 'ejs');
+app.set('views', __dirname + '/views');
+app.set('layout', 'layouts/main');
+app.use(expressLayouts);
+
+/* --- Middlewares globais --- */
 app.use(cors());
-app.use(body.json());
-app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
-  next();
-});
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// Rotas
-app.use('/rooms',        require('./routes/rooms'));
-app.use('/reservations', require('./routes/reservations'));
-app.use('/customers',    require('./routes/customers'));
-app.use('/auth', require('./routes/auth'));
-app.use('/payments', require('./routes/payments'));
-app.use('/reports', require('./routes/reports'));
-app.use('/channel', require('./routes/channel'));
-
-app.get('/health', (_, res) => res.json({ status: 'ok' }));
-
-// Sincroniza DB e inicia servidor
-sequelize.sync().then(() => {
-  app.listen(3000, () =>
-    console.log('API rodando em http://localhost:3000')
-  );
+/* =========================================================
+   ROTAS DE PÁGINA (HTML) – vêm ANTES das rotas de API
+   ========================================================= */
+app.get('/', async (req, res) => {
+  const totalRooms = await Room.count();
+  const occupied = await Room.count({
+    where: { status: { [Op.ne]: 'available' } }
+  });
+  res.render('index', { title: 'Dashboard', totalRooms, occupied });
 });
-// ...código já existente...
-app.use('/reservations', require('./routes/reservations'));
 
-// Página estática para teste rápido (opcional)
-app.get('/reservas', (_, res) => res.sendFile(__dirname + '/public/reservations.html'));
+app.get('/rooms', async (req, res) => {
+  const rooms = await Room.findAll();
+  res.render('rooms', { title: 'Quartos', rooms });
+});
 
-app.use('/customers', require('./routes/customers'));
+app.get('/reservations', async (req, res) => {
+  const reservations = await Reservation.findAll({ include: Room });
+  res.render('reservations', { title: 'Reservas', reservations });
+});
 
-app.get('/clientes', (_, res) =>
-  res.sendFile(__dirname + '/public/customers.html')
-);
+app.get('/customers', async (req, res) => {
+  const customers = await Customer.findAll();
+  res.render('customers', { title: 'Clientes', customers });
+});
 
-app.use('/housekeeping', require('./routes/housekeeping'));
+app.get('/payments', async (req, res) => {
+  const payments = await Payment.findAll();          // sem include p/ evitar erro
+  res.render('payments', { title: 'Pagamentos', payments });
+});
 
-app.get('/limpeza', (_, res) =>
-  res.sendFile(__dirname + '/public/housekeeping.html')
-);
+app.get('/reports', (req, res) => {
+  res.render('reports', { title: 'Relatórios' });
+});
+
+app.get('/login', (req, res) => {
+  res.render('login', { title: 'Login' });
+});
+
+/* =========================================================
+   ROTAS DE API (JSON) – agora sob prefixo /api
+   ========================================================= */
+app.use('/api/rooms', require('./routes/rooms'));
+app.use('/api/reservations', require('./routes/reservations'));
+app.use('/api/customers', require('./routes/customers'));
+app.use('/api/payments', require('./routes/payments'));
+
+/* ===== SERVIDOR ===== */
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Servidor rodando em http://localhost:${PORT}`));

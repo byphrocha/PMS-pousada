@@ -1,0 +1,27 @@
+
+
+<h1 class="h3 mb-3">Quartos</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>#</th><th>Nome</th><th>Tipo</th><th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% rooms.forEach(r => { %>
+      <tr>
+        <td><%= r.id %></td>
+        <td><%= r.name %></td>
+        <td><%= r.type %></td>
+        <td>
+          <% if (r.occupied) { %>
+            <span class="badge bg-danger">Ocupado</span>
+          <% } else { %>
+            <span class="badge bg-success">Livre</span>
+          <% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
