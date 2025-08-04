@@ -28,9 +28,13 @@ router.post('/', async (req, res) => {
 // ---- ATUALIZAR ----
 router.put('/:id', async (req, res) => {
   try {
-    const [updated] = await Room.update(req.body, { where: { id: req.params.id } });
-    if (updated) return res.sendStatus(204);
-    return res.status(404).json({ error: 'Quarto não encontrado' });
+    const [affected] = await Room.update(req.body, { where: { id: req.params.id } });
+
+if (affected === 0) {
+  return res.status(404).json({ error: 'Quarto não encontrado' });
+}
+
+res.sendStatus(204);  // sucesso
   } catch (err) {
     console.error('Erro PUT /rooms/:id', err);
     res.status(500).json({ error: 'Falha ao atualizar quarto' });

@@ -5,7 +5,7 @@ const { Room } = require('../models');
 router.get('/tasks', async (_, res) => {
   const rooms = await Room.findAll({
     where: { cleaningStatus: ['dirty', 'maintenance'] },
-    order: [['cleaningStatus', 'ASC']]
+    order: [['name', 'ASC']]
   });
   res.json(rooms);
 });
