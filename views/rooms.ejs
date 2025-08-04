@@ -5,40 +5,90 @@
 <!-- Botão para criar um novo quarto -->
 <a href="/rooms/new" class="btn btn-primary mb-3">+ Novo quarto</a>
 
-<table class="table table-striped table-hover">
+<table id="roomsTable" class="table table-striped table-hover">
   <thead>
     <tr>
       <th>#</th>
       <th>Nome</th>
       <th>Tipo</th>
       <th>Status</th>
+      <th>Limpeza</th>     <!-- cabeçalho adicionado -->
       <th>Ações</th>
     </tr>
   </thead>
+
   <tbody>
-    <% rooms.forEach(r => { %>
-      <tr>
-        <td><%= r.id %></td>
-        <td><%= r.name %></td>
-        <td><%= r.type %></td>
+  <% rooms.forEach(r => { %>
+    <tr>
+      <td><%= r.id %></td>
+      <td><%= r.name %></td>
+      <td><%= r.type %></td>
 
-        <!-- Status -->
-        <td>
-          <% if (r.occupied) { %>
-            <span class="badge bg-danger">Ocupado</span>
-          <% } else { %>
-            <span class="badge bg-success">Livre</span>
-          <% } %>
-        </td>
+      <!-- Badge de disponibilidade -->
+      <td>
+        <% if (r.status === 'available') { %>
+          <span class="badge bg-success"><i class="fa-solid fa-check"></i> Livre</span>
+        <% } else if (r.status === 'reserved') { %>
+          <span class="badge bg-danger"><i class="fa-solid fa-bed"></i> Ocupado</span>
+        <% } else { %>
+          <span class="badge bg-warning text-dark"><i class="fa-solid fa-tools"></i> Manutenção</span>
+        <% } %>
+      </td>
 
+      <!-- Badge de limpeza -->
+      <td>
+        <% if (r.cleaningStatus === 'clean') { %>
+          <span class="badge bg-primary"><i class="fa-solid fa-broom"></i> Limpo</span>
+        <% } else { %>
+          <span class="badge bg-warning text-dark"><i class="fa-solid fa-broom"></i> Sujo</span>
+        <% } %>
+      </td>
+
+      <!-- Coluna de ações -->
+      <td>
         <!-- Botão Editar -->
-        <td>
-          <a href="/rooms/<%= r.id %>/edit" class="btn btn-sm btn-secondary">
-            Editar
-          </a>
-        </td>
-      </tr>
-    <% }) %>
+        <a href="/rooms/<%= r.id %>/edit" class="btn btn-sm btn-secondary me-1">
+          <i class="fa-solid fa-pen"></i>
+        </a>
+
+        <!-- Botão Excluir (abre modal) -->
+        <button
+          class="btn btn-sm btn-outline-danger"
+          data-bs-toggle="modal"
+          data-bs-target="#confirmDelete<%= r.id %>"
+        >
+          <i class="fa-solid fa-trash"></i>
+        </button>
+
+        <!-- Modal de confirmação -->
+        <div
+          class="modal fade"
+          id="confirmDelete<%= r.id %>"
+          tabindex="-1"
+          aria-labelledby="deleteLabel<%= r.id %>"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 id="deleteLabel<%= r.id %>" class="modal-title">Confirmar exclusão</h5>
+                <button class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                Tem certeza que deseja excluir o quarto <strong><%= r.name %></strong>?
+              </div>
+              <div class="modal-footer">
+                <form action="/api/rooms/<%= r.id %>?_method=DELETE" method="post">
+                  <button class="btn btn-danger">Excluir</button>
+                </form>
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+    </tr>
+  <% }) %>
   </tbody>
 </table>
 

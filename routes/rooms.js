@@ -17,31 +17,27 @@ router.get('/:id', async (req, res) => {
 // ---- CRIAR ----
 router.post('/', async (req, res) => {
   try {
-    const novo = await Room.create(req.body);
-    return res.status(201).json(novo);
+    await Room.create(req.body);
+    // redireciona para a lista com mensagem
+    return res.redirect('/rooms?success=Quarto criado com sucesso');
   } catch (err) {
     console.error('Erro ao criar quarto:', err);
     return res.status(500).json({ error: 'Falha ao criar quarto' });
   }
 });
-
 // ---- ATUALIZAR ----
 router.put('/:id', async (req, res) => {
   try {
-    console.log('ID recebido:', req.params.id);
-    console.log('Body recebido:', req.body);
-
     const [affected] = await Room.update(req.body, {
       where: { id: req.params.id }
     });
-
-    console.log('Linhas afetadas:', affected);
 
     if (affected === 0) {
       return res.status(404).json({ error: 'Quarto não encontrado' });
     }
 
-    res.sendStatus(204);
+    // Sucesso → redireciona para lista com toast
+    return res.redirect('/rooms?success=Quarto atualizado com sucesso');
   } catch (err) {
     console.error('Erro PUT /api/rooms/:id', err);
     res.status(500).json({ error: 'Falha ao atualizar quarto' });
