@@ -21,29 +21,27 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
-app.use(methodOverride('_method'));      // <— novo
+app.use(methodOverride('_method'));
 
-/* =========================================
-   ROTAS DE PÁGINA (HTML) – ANTES das rotas de API
-   ========================================= */
+/* ===== Rotas de PÁGINA ===== */
+app.use('/rooms', require('./routes/roomsPages'));
+
+/* ===== Rotas de API ===== */
+app.use('/api/rooms',        require('./routes/rooms'));
+app.use('/api/reservations', require('./routes/reservations'));
+app.use('/api/customers',    require('./routes/customers'));
+app.use('/api/payments',     require('./routes/payments'));
+app.use('/api/housekeeping', require('./routes/housekeeping'));
+
+/* ===== Dashboard e outras páginas ===== */
 app.get('/', async (req, res) => {
   const totalRooms = await Room.count();
-  const occupied = await Room.count({
-  where: { status: { [Op.ne]: 'available' } }   // ← aqui
-});
+  const occupied   = await Room.count({ where: { status: { [Op.ne]: 'available' } } });
   res.render('index', { title: 'Dashboard', totalRooms, occupied });
 });
 
-app.get('/rooms', async (req, res) => {
-  const rooms = await Room.findAll();
-  res.render('rooms', { title: 'Quartos', rooms });
-});
-
 app.get('/reservations', async (req, res) => {
-  const reservations = await Reservation.findAll({
-    include: Room,
-    order: [['checkIn', 'ASC']]       // ← campo correto
-  });
+  const reservations = await Reservation.findAll({ include: Room, order: [['checkIn', 'ASC']] });
   res.render('reservations', { title: 'Reservas', reservations });
 });
 
@@ -59,7 +57,7 @@ app.get('/payments', async (req, res) => {
 
 app.get('/housekeeping', async (req, res) => {
   const tasks = await Room.findAll({
-    where: { cleaningStatus: { [Op.ne]: 'clean' } }, // sujo ou manutenção
+    where: { cleaningStatus: { [Op.ne]: 'clean' } },
     order: [['name', 'ASC']]
   });
   res.render('housekeeping', { title: 'Limpeza', tasks });
@@ -67,20 +65,6 @@ app.get('/housekeeping', async (req, res) => {
 
 app.get('/reports', (req, res) => res.render('reports', { title: 'Relatórios' }));
 app.get('/login',   (req, res) => res.render('login',   { title: 'Login' }));
-
-/* ===== Rotas auxiliares para formulários de quartos ===== */
-app.use('/rooms', require('./routes/roomsPages'));   // <— novo
-
-/* =========================================
-   ROTAS DE API (JSON) – sob prefixo /api
-   ========================================= */
-app.use('/api/rooms',        require('./routes/rooms'));
-app.use('/api/reservations', require('./routes/reservations'));
-app.use('/api/customers',    require('./routes/customers'));
-app.use('/api/payments',     require('./routes/payments'));
-app.use('/api/housekeeping', require('./routes/housekeeping'));
-app.use('/rooms', require('./routes/roomsPages'));
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando em http://localhost:${PORT}`));

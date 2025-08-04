@@ -2,7 +2,7 @@
 
 <h1>Editar Quarto <%= room.number %></h1>
 
-<form action="/api/rooms/<%= room.id %>?" method="post">
+<form action="/api/rooms/<%= room.id %>?_method=PUT" method="post">
   <label>Nome</label>
   <input name="name" value="<%= room.name %>" required>
 
