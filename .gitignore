@@ -1,0 +1,24 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ambiente
+.env
+.env.*
+
+# Banco de dados
+database.sqlite*
+*.sqlite
+/backups/
+
+# Build / Coverage
+dist/
+build/
+coverage/
+
+# Editor / SO
+.DS_Store
+.idea/
+.vscode/
