@@ -1,52 +1,47 @@
 import { Request, Response, NextFunction } from 'express';
-import RoomService from '../services/RoomService';
+import CustomerService from '../services/CustomerService';
 
-export default class RoomController {
-  /* LISTAR TODOS */
+export default class CustomerController {
   static async index(_req: Request, res: Response, next: NextFunction) {
     try {
-      const rooms = await RoomService.listAll();   // <‑‑ listAll
-      res.json(rooms);
+      const list = await CustomerService.listAll();
+      res.json(list);
     } catch (err) {
       next(err);
     }
   }
 
-  /* BUSCAR POR ID */
   static async show(req: Request, res: Response, next: NextFunction) {
     try {
-      const room = await RoomService.findById(Number(req.params.id)); // <‑‑ findById
-      if (!room) return res.status(404).json({ error: 'Quarto não encontrado' });
-      res.json(room);
+      const c = await CustomerService.findById(Number(req.params.id));
+      if (!c) return res.status(404).json({ error: 'Cliente não encontrado' });
+      res.json(c);
     } catch (err) {
       next(err);
     }
   }
 
-  /* CRIAR */
   static async store(req: Request, res: Response, next: NextFunction) {
     try {
-      const created = await RoomService.create(req.body);
+      const created = await CustomerService.create(req.body);
       res.status(201).json(created);
     } catch (err) {
       next(err);
     }
   }
 
-  /* ATUALIZAR */
   static async update(req: Request, res: Response, next: NextFunction) {
     try {
-      await RoomService.update(Number(req.params.id), req.body);
+      await CustomerService.update(Number(req.params.id), req.body);
       res.status(204).send();
     } catch (err) {
       next(err);
     }
   }
 
-  /* REMOVER */
   static async destroy(req: Request, res: Response, next: NextFunction) {
     try {
-      await RoomService.remove(Number(req.params.id));  // <‑‑ remove
+      await CustomerService.remove(Number(req.params.id));
       res.status(204).send();
     } catch (err) {
       next(err);

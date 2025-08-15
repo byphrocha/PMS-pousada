@@ -1,24 +1,36 @@
 import db from '../models';
+import { Transaction } from 'sequelize';
 
 export default {
-  async findAll() {
+  /* ------------------------------------------------------------------ */
+  /* READ                                                               */
+  /* ------------------------------------------------------------------ */
+  findAll() {
     return db.Room.findAll();
   },
 
-  async findById(id: number) {
+  findById(id: number) {
     return db.Room.findByPk(id);
   },
 
-  async create(data: any) {
-    return db.Room.create(data);
+  /* ------------------------------------------------------------------ */
+  /* CREATE                                                             */
+  /* ------------------------------------------------------------------ */
+  create(data: any, t?: Transaction) {
+    return db.Room.create(data, { transaction: t });
   },
 
-  async update(id: number, data: any) {
-    await db.Room.update(data, { where: { id } });
-    return db.Room.findByPk(id);
+  /* ------------------------------------------------------------------ */
+  /* UPDATE                                                             */
+  /* ------------------------------------------------------------------ */
+  update(id: number, data: any, t?: Transaction) {
+    return db.Room.update(data, { where: { id }, transaction: t });
   },
 
-  async remove(id: number) {
-    return db.Room.destroy({ where: { id } });
+  /* ------------------------------------------------------------------ */
+  /* DELETE                                                             */
+  /* ------------------------------------------------------------------ */
+  remove(id: number, t?: Transaction) {
+    return db.Room.destroy({ where: { id }, transaction: t });
   }
 };

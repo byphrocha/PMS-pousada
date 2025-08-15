@@ -1,18 +1,12 @@
-import { Router, Request, Response } from 'express';
-import db from '../models';
+import { Router } from 'express';
+import PaymentController from '../controllers/PaymentController';
 
 const router = Router();
 
-/** GET /payments */
-router.get('/', async (_req: Request, res: Response) => {
-  const payments = await db.Payment.findAll({ include: [db.Reservation] });
-  return res.json(payments);
-});
-
-/** POST /payments */
-router.post('/', async (req: Request, res: Response) => {
-  const created = await db.Payment.create(req.body);
-  return res.status(201).json(created);
-});
+router.get('/', PaymentController.index);
+router.get('/:id', PaymentController.show);
+router.post('/', PaymentController.store);
+router.put('/:id', PaymentController.update);
+router.delete('/:id', PaymentController.destroy);
 
 export default router;

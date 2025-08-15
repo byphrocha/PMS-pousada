@@ -78,6 +78,7 @@
                 Tem certeza que deseja excluir o quarto <strong><%= r.name %></strong>?
               </div>
               <div class="modal-footer">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                 <form action="/api/rooms/<%= r.id %>?_method=DELETE" method="post">
                   <button class="btn btn-danger">Excluir</button>
                 </form>

@@ -15,7 +15,7 @@ import roomsRoutes from './routes/rooms';
 import reservationsRoutes from './routes/reservations';
 import customersRoutes from './routes/customers';
 import paymentsRoutes from './routes/payments';
-import { errorHandler } from './middlewares/errorHandler';
+import  errorHandler  from './middlewares/errorHandler';
 
 import db from './models';
 import { Op } from 'sequelize';
@@ -178,6 +178,7 @@ app.get('/login', (_req, res) => res.render('login', { title: 'Login' }));
 /* Formulários NEW / EDIT de quartos (páginas) */
 app.use('/rooms', roomsPagesRoutes);
 
+app.use(errorHandler);
 /* -------------------------------------------------------------------------- */
 /* 4. Middleware 404                                                          */
 /* -------------------------------------------------------------------------- */

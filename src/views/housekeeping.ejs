@@ -20,6 +20,7 @@
           <span class="badge bg-warning text-dark"><%= room.cleaningStatus %></span>
         </td>
         <td>
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <form
             action="/api/housekeeping/<%= room.id %>/clean?_method=PUT"
             method="post"

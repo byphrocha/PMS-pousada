@@ -1,25 +1,45 @@
+import db from '../models';
 import RoomRepository from '../repositories/RoomRepository';
 
 export default {
-  list() {
+  /* ------------------------------------------------------------------ */
+  /* LISTAR TODOS                                                       */
+  /* ------------------------------------------------------------------ */
+  listAll() {
     return RoomRepository.findAll();
   },
 
-  get(id: number) {
+  /* ------------------------------------------------------------------ */
+  /* BUSCAR POR ID                                                      */
+  /* ------------------------------------------------------------------ */
+  findById(id: number) {
     return RoomRepository.findById(id);
   },
 
-  create(data: any) {
-    // regras de negócio adicionais aqui
-    return RoomRepository.create(data);
+  /* ------------------------------------------------------------------ */
+  /* CRIAR NOVO QUARTO                                                  */
+  /* ------------------------------------------------------------------ */
+  async create(data: any) {
+    return db.sequelize.transaction((t) =>
+      RoomRepository.create(data, t)
+    );
   },
 
-  update(id: number, data: any) {
-    // validações…
-    return RoomRepository.update(id, data);
+  /* ------------------------------------------------------------------ */
+  /* ATUALIZAR QUARTO                                                   */
+  /* ------------------------------------------------------------------ */
+  async update(id: number, data: any) {
+    return db.sequelize.transaction((t) =>
+      RoomRepository.update(id, data, t)
+    );
   },
 
-  delete(id: number) {
-    return RoomRepository.remove(id);
+  /* ------------------------------------------------------------------ */
+  /* REMOVER QUARTO                                                     */
+  /* ------------------------------------------------------------------ */
+  async remove(id: number) {
+    return db.sequelize.transaction((t) =>
+      RoomRepository.remove(id, t)
+    );
   }
 };
