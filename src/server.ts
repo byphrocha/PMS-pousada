@@ -1,9 +1,4 @@
-console.log('/api           typeof:', typeof apiRouter);
-console.log('/api/rooms     typeof:', typeof roomsRoutes);
-console.log('/api/reservations typeof:', typeof reservationsRoutes);
-console.log('/api/customers typeof:', typeof customersRoutes);
-console.log('/api/payments  typeof:', typeof paymentsRoutes);
-console.log('/roomsPages    typeof:', typeof roomsPagesRoutes);import 'dotenv/config';
+import 'dotenv/config';
 import path from 'path';
 import express, { Request, Response, NextFunction } from 'express';
 import helmet from 'helmet';
@@ -32,8 +27,14 @@ const { Room, Reservation, Customer, Payment } = db;
 /* -------------------------------------------------------------------------- */
 const app = express();
 
-console.log('/api typeof:', typeof apiRouter);          // deve ser 'function'
-console.log('/api/rooms typeof:', typeof roomsRoutes);  // idem
+/* ---- Logs rápidos para confirmar tipos (podem ser removidos depois) ---- */
+console.log('/api           typeof:', typeof apiRouter);
+console.log('/api/rooms     typeof:', typeof roomsRoutes);
+console.log('/api/reservations typeof:', typeof reservationsRoutes);
+console.log('/api/customers typeof:', typeof customersRoutes);
+console.log('/api/payments  typeof:', typeof paymentsRoutes);
+console.log('/roomsPages    typeof:', typeof roomsPagesRoutes);
+
 /* ---------- Segurança (Helmet + CSP) ---------- */
 app.use(
   helmet({
@@ -53,11 +54,7 @@ app.use(
           'https://fonts.googleapis.com'
         ],
         fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        imgSrc: [
-          "'self'",
-          'data:',
-          'blob:'          // <‑‑ ADICIONE ESTA LINHA
-        ],
+        imgSrc: ["'self'", 'data:', 'blob:'],
         connectSrc: ["'self'"],
         objectSrc: ["'none'"],
         upgradeInsecureRequests: []
