@@ -26,6 +26,7 @@ const { Room, Reservation, Customer, Payment } = db;
 /* 1. App & Middlewares globais                                               */
 /* -------------------------------------------------------------------------- */
 const app = express();
+ 
 
 /* ---- Logs rápidos para confirmar tipos (podem ser removidos depois) ---- */
 console.log('/api           typeof:', typeof apiRouter);
@@ -186,10 +187,16 @@ app.use((_req, res) =>
   res.status(404).render('errors/404', { title: '404' })
 );
 
+
+
 /* -------------------------------------------------------------------------- */
 /* 5. Inicialização do servidor                                               */
 /* -------------------------------------------------------------------------- */
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
-app.listen(PORT, () =>
-  console.log(`Servidor rodando em http://localhost:${PORT}`)
-);
+export default app;
+if (process.env.NODE_ENV !== 'test') {
+  const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+  app.listen(PORT, () =>
+    console.log(`Servidor rodando em http://localhost:${PORT}`)
+  );
+}
